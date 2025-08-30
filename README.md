@@ -74,3 +74,16 @@ docker run --rm -p 8080:8080 \
 
 ## License
 Apache-2.0
+
+### CLI demo
+```bash
+# measure relay latencies
+RELAYS="https://rpc.flashbots.net,https://rpc.mevblocker.io" npm run -s cli ping --relays $RELAYS
+
+# compare shield vs public (simulate without sending)
+npm run -s cli send --shield http://localhost:8080 --public https://rpc.flashbots.net --simulate
+```
+
+### Grafana
+- Import `dashboards/shield-rpc-grafana.json` into Grafana.
+- Example Prometheus scrape config in `docs/prometheus-scrape-example.yml`.
