@@ -28,6 +28,8 @@ Environment variables:
   - `RELAY_URLS=https://rpc.flashbots.net,https://rpc.mevblocker.io`
 
 ## Endpoints
+
+Note: both /health and /healthz are available.
 - `GET /healthz`
   - Returns `{ "status": "ok" }` if the service is up
 - `GET /metrics`
