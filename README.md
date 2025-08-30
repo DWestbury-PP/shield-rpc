@@ -1,18 +1,76 @@
 # shield rpc
 
-MEV-Protected Transaction Router + Analytics (API + SDK).
+MEV-protected transaction router with simple endpoints and Prometheus metrics.
 
-## From brainstorming
+Think of it like a smart mail room: you hand it a sealed envelope (your signed tx), and it chooses the safest, fastest private courier (Flashbots, MEV-Blocker, etc.). If the first courier is down, it tries the next — and logs everything so you can see what happened.
 
-- **What**: A drop-in RPC/router that auto-selects the best private mempool path (Flashbots Protect, MEV-Blocker, BlockSec), with fallback logic, tx-success SLAs, gas/MEV refund tracking, and a Grafana-ready metrics endpoint.
-- **Why it pays**: Teams will spend to avoid sandwiching and failed tx gas waste; finance desks want auditability.
-- **How you stand out**: Package it like "Stripe for protected orderflow" — one endpoint, per-project dashboards, and webhooks. Start with Ethereum + major L2s.
+## Why
+- Reduce failed-tx gas waste and sandwich risk
+- Measure relay health, latency, and success rate
+- One simple endpoint instead of juggling multiple relay APIs
 
-## References
-- Flashbots Protect: https://docs.flashbots.net/flashbots-protect/overview
-- MEV-Blocker (CoW): https://docs.cow.fi/mevblocker
-- BlockSec Anti-MEV RPC: https://docs.blocksec.com/blocksec-anti-mev-rpc
-- MEV blocking provider notes: https://web3-ethereum-defi.readthedocs.io/api/provider/_autosummary_provider/eth_defi.provider.mev_blocker.html
+## Quickstart
+Requirements: Node 20+
 
-## Status
-Draft scaffold based on brainstorming.
+```bash
+# install deps
+npm ci
+
+# build and run
+npm run build
+npm start
+# server: http://localhost:8080
+```
+
+Environment variables:
+- `PORT` (default: 8080)
+- `RELAY_URLS` (optional): comma-separated list of JSON-RPC endpoints to try in order. Example:
+  - `RELAY_URLS=https://rpc.flashbots.net,https://rpc.mevblocker.io`
+
+## Endpoints
+- `GET /healthz`
+  - Returns `{ "status": "ok" }` if the service is up
+- `GET /metrics`
+  - Prometheus exposition format (relay latency/success/fail, etc.)
+- `POST /sendRawTransaction`
+  - Body: `{ "rawTx": "0x...signedTx..." }`
+  - Tries relays in order until one accepts; returns `{ "relay": "name", "txHash": "0x..." }`
+  - On failure: `502` with `{ "error": "relay_failure", "message": "..." }`
+
+### curl examples
+```bash
+# health
+curl -s http://localhost:8080/healthz | jq
+
+# metrics
+curl -s http://localhost:8080/metrics | head -n 20
+
+# send raw tx (replace with a real signed tx)
+curl -s -X POST http://localhost:8080/sendRawTransaction \
+  -H 'content-type: application/json' \
+  -d '{"rawTx":"0xSIGNED_RAW_TX"}' | jq
+```
+
+## Configuration & behavior
+- Fallback: relays are attempted sequentially until success
+- Defaults: Flashbots Protect, MEV-Blocker (override with `RELAY_URLS`)
+- Metrics: relay request/response counts and latency histograms
+
+## Docker
+```bash
+# build
+docker build -t shield-rpc:dev .
+# run
+docker run --rm -p 8080:8080 \
+  -e RELAY_URLS="https://rpc.flashbots.net,https://rpc.mevblocker.io" \
+  shield-rpc:dev
+```
+
+## Roadmap (next)
+- Add BlockSec Anti-MEV relay adapter
+- Add simulation endpoint and policy rules
+- Per-project API keys and rate limits
+- Grafana dashboard JSON
+
+## License
+Apache-2.0
