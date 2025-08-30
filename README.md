@@ -89,3 +89,31 @@ npm run -s cli send --shield http://localhost:8080 --public https://rpc.flashbot
 ### Grafana
 - Import `dashboards/shield-rpc-grafana.json` into Grafana.
 - Example Prometheus scrape config in `docs/prometheus-scrape-example.yml`.
+
+## End-to-End demo (Docker Compose)
+
+```bash
+# 1) Optional: set relays
+cp -n .env.example .env || true
+# edit .env if you want custom RELAY_URLS
+
+# 2) Build and start the stack (shield + Prometheus + Grafana)
+docker compose up --build
+
+# 3) Verify services
+# shield-rpc:   http://localhost:8080/health  (or /healthz)
+# Prometheus:   http://localhost:9090
+# Grafana:      http://localhost:3000  (user: admin, pass: admin)
+
+# 4) Dashboard
+# Grafana auto-loads the Prometheus datasource and imports dashboards/shield-rpc-grafana.json
+# Open the dashboard named "shield-rpc overview"
+
+# 5) Generate traffic from another terminal
+RELAYS="https://rpc.flashbots.net,https://rpc.mevblocker.io" npm run -s cli ping --relays $RELAYS
+npm run -s cli send --shield http://localhost:8080 --public https://rpc.flashbots.net --simulate
+
+# 6) Tear down
+# Press Ctrl+C in the compose terminal, or:
+docker compose down -v
+```
