@@ -78,12 +78,16 @@ docker run --rm -p 8080:8080 \
 Apache-2.0
 
 ### CLI demo
+Note: when passing arguments to npm scripts, include `--` before the CLI args so they reach the script.
 ```bash
 # measure relay latencies
-RELAYS="https://rpc.flashbots.net,https://rpc.mevblocker.io" npm run -s cli ping --relays $RELAYS
+RELAYS="https://rpc.flashbots.net,https://rpc.mevblocker.io" npm run -s cli -- ping --relays $RELAYS
 
 # compare shield vs public (simulate without sending)
-npm run -s cli send --shield http://localhost:8080 --public https://rpc.flashbots.net --simulate
+npm run -s cli -- send --shield http://localhost:8080 --public https://rpc.flashbots.net --simulate
+
+# optional: generate a bit of load so Grafana shows non-zero series
+for i in {1..20}; do npm run -s cli -- send --shield http://localhost:8080 --public https://rpc.flashbots.net --simulate; sleep 1; done
 ```
 
 ### Grafana

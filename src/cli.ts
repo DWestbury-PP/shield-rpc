@@ -51,7 +51,7 @@ async function ping(): Promise<number> {
 }
 
 async function send(): Promise<number> {
-  const shield = getFlag('shield') || 'http://localhost:8080'\;
+  const shield = getFlag('shield') || 'http://localhost:8080';
   const rawTx = getFlag('rawTx');
   const pub = getFlag('public');
   const simulate = hasFlag('simulate');
