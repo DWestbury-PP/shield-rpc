@@ -1,4 +1,4 @@
-# mev protected router
+# shield rpc
 
 Initial scaffold for mev-protected-router.
 
