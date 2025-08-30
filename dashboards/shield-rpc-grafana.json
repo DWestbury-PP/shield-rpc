@@ -9,7 +9,7 @@
       "type": "timeseries",
       "title": "Requests by relay",
       "targets": [
-        { "expr": "sum(rate(relay_requests_total[5m])) by (relay)", "legendFormat": "{{relay}}" }
+        { "expr": "sum(rate(relay_requests_total[1m])) by (relay)", "legendFormat": "{{relay}}" }
       ],
       "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 }
     },
@@ -17,7 +17,7 @@
       "type": "timeseries",
       "title": "Success rate by relay",
       "targets": [
-        { "expr": "sum(rate(relay_success_total[5m])) by (relay) / sum(rate(relay_requests_total[5m])) by (relay)", "legendFormat": "{{relay}}" }
+        { "expr": "sum(rate(relay_success_total[1m])) by (relay) / sum(rate(relay_requests_total[1m])) by (relay)", "legendFormat": "{{relay}}" }
       ],
       "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 }
     },
@@ -25,8 +25,8 @@
       "type": "timeseries",
       "title": "P50/P95 latency (ms)",
       "targets": [
-        { "expr": "histogram_quantile(0.5, sum(rate(relay_latency_ms_bucket[5m])) by (le, relay))", "legendFormat": "p50 {{relay}}" },
-        { "expr": "histogram_quantile(0.95, sum(rate(relay_latency_ms_bucket[5m])) by (le, relay))", "legendFormat": "p95 {{relay}}" }
+        { "expr": "histogram_quantile(0.5, sum(rate(relay_latency_ms_bucket[1m])) by (le, relay))", "legendFormat": "p50 {{relay}}" },
+        { "expr": "histogram_quantile(0.95, sum(rate(relay_latency_ms_bucket[1m])) by (le, relay))", "legendFormat": "p95 {{relay}}" }
       ],
       "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 }
     },
@@ -34,7 +34,7 @@
       "type": "table",
       "title": "Failures by relay (top reasons)",
       "targets": [
-        { "expr": "topk(5, sum(rate(relay_failures_total[5m])) by (relay, reason))", "legendFormat": "{{relay}} {{reason}}" }
+        { "expr": "topk(5, sum(increase(relay_failures_total[1m])) by (relay, reason))", "legendFormat": "{{relay}} {{reason}}" }
       ],
       "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 }
     }
