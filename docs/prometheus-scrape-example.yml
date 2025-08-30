@@ -1,0 +1,7 @@
+# Example Prometheus scrape config
+scrape_configs:
+  - job_name: 'shield-rpc'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['host.docker.internal:8080'] # or 'localhost:8080'
+    metrics_path: /metrics
