@@ -5,6 +5,8 @@ services:
     environment:
       - PORT=8080
       - RELAY_URLS=${RELAY_URLS}
+      - DEMO_MODE=true
+      - DEMO_INTERVAL_MS=750
     ports:
       - "8080:8080"
 

@@ -40,4 +40,19 @@ app.post('/sendRawTransaction', async (req, reply) => {
 
 app.listen({ host: serverHost, port: serverPort }).then(() => {
   app.log.info({ port: serverPort }, 'shield-rpc listening');
+  // Demo mode: generate steady metrics traffic without external load
+  const demoMode = process.env.DEMO_MODE === 'true';
+  if (demoMode) {
+    const intervalMs = Number(process.env.DEMO_INTERVAL_MS || 1000);
+    const relays = getRelayConfigs();
+    app.log.info({ intervalMs }, 'DEMO_MODE enabled: generating traffic');
+    setInterval(async () => {
+      try {
+        // Intentionally use an invalid rawTx to exercise failure paths/latency
+        await sendRawTransactionWithFallback('0x', relays);
+      } catch {
+        // ignore; metrics already captured in relay flow
+      }
+    }, intervalMs);
+  }
 });
