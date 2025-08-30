@@ -94,6 +94,9 @@ for i in {1..20}; do npm run -s cli -- send --shield http://localhost:8080 --pub
 - Import `dashboards/shield-rpc-grafana.json` into Grafana.
 - Example Prometheus scrape config in `docs/prometheus-scrape-example.yml`.
 
+### Dashboard preview
+![shield-rpc Grafana dashboard](dashboards/Grafana-screenshot.png)
+
 ## End-to-End demo (Docker Compose)
 
 ```bash
