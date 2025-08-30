@@ -17,3 +17,7 @@ TBD — fill in after initial scaffold.
 
 ## Lessons Learned
 - Capture findings from issues/PRs.
+
+## Licensing
+
+- Recommended: Apache-2.0 (patent grant; infra-friendly).
