@@ -12,7 +12,10 @@
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
     "cli": "tsx src/cli.ts",
-    "demo:load": "bash -c 'for i in {1..300}; do npm run -s cli -- send --shield ${SHIELD_URL:-http://localhost:8080} --public ${PUBLIC_RPC:-https://rpc.flashbots.net} --simulate; sleep ${DELAY:-1}; done'"
+    "demo:load": "bash -c 'for i in {1..300}; do npm run -s cli -- send --shield ${SHIELD_URL:-http://localhost:8080} --public ${PUBLIC_RPC:-https://rpc.flashbots.net} --simulate; sleep ${DELAY:-1}; done'",
+    "demo:on": "DEMO_MODE=true DEMO_INTERVAL_MS=${DEMO_INTERVAL_MS:-750} docker compose up -d --build shield",
+    "demo:off": "DEMO_MODE=false docker compose up -d --build shield",
+    "demo:fast": "DEMO_MODE=true DEMO_INTERVAL_MS=250 docker compose up -d --build shield"
   },
   "keywords": [],
   "author": "",

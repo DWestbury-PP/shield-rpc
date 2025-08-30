@@ -121,3 +121,20 @@ npm run -s cli send --shield http://localhost:8080 --public https://rpc.flashbot
 # Press Ctrl+C in the compose terminal, or:
 docker compose down -v
 ```
+
+### Demo mode (hands-free traffic)
+Enable a built-in traffic generator so Grafana stays lively without manual loops.
+
+```bash
+# enable demo mode (750ms interval) and rebuild shield
+npm run -s demo:on
+
+# speed it up (250ms interval)
+npm run -s demo:fast
+
+# turn demo mode off
+npm run -s demo:off
+
+# environment overrides (when calling demo:on)
+#   DEMO_INTERVAL_MS=500 npm run -s demo:on
+```

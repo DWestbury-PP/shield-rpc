@@ -3,10 +3,10 @@ services:
     build: .
     image: shield-rpc:dev
     environment:
-      - PORT=8080
+      - PORT=${PORT:-8080}
       - RELAY_URLS=${RELAY_URLS}
-      - DEMO_MODE=true
-      - DEMO_INTERVAL_MS=750
+      - DEMO_MODE=${DEMO_MODE:-false}
+      - DEMO_INTERVAL_MS=${DEMO_INTERVAL_MS:-1000}
     ports:
       - "8080:8080"
 
